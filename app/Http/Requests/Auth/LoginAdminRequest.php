@@ -1,0 +1,14 @@
+<?php
+
+namespace App\Http\Requests\Auth;
+
+class LoginAdminRequest extends ApiAuthRequest
+{
+    public function rules(): array
+    {
+        return [
+            'email' => ['required', 'email:rfc'],
+            'password' => ['required', 'string'],
+        ];
+    }
+}
