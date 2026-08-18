@@ -23,6 +23,19 @@ class User extends Authenticatable
 
     protected string $guard_name = 'web';
 
+    protected static function booted(): void
+    {
+        static::updated(function (User $user): void {
+            $wasDeactivated = $user->wasChanged('is_active') && ! $user->is_active;
+
+            if ($wasDeactivated || $user->wasChanged('password')) {
+                $user->tokens()->delete();
+            }
+        });
+
+        static::deleted(fn (User $user) => $user->tokens()->delete());
+    }
+
     public function patientProfile(): HasOne
     {
         return $this->hasOne(PatientProfile::class);

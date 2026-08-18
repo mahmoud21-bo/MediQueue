@@ -19,7 +19,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"first_name\": \"Mona\",\n  \"last_name\": \"Ali\",\n  \"email\": \"patient@example.test\",\n  \"phone\": \"+15550100001\",\n  \"password\": \"Example#Pass1\",\n  \"password_confirmation\": \"Example#Pass1\",\n  \"date_of_birth\": \"1995-05-12\",\n  \"gender\": \"female\"\n}",
+              "raw": "{\n  \"first_name\": \"Mona\",\n  \"last_name\": \"Ali\",\n  \"email\": \"patient@example.test\",\n  \"phone\": \"+15550100001\",\n  \"password\": \"Example#Pass1\",\n  \"password_confirmation\": \"Example#Pass1\",\n  \"date_of_birth\": \"1995-05-12\",\n  \"gender\": \"female\",\n  \"device_name\": \"Mona iPhone\"\n}",
               "options": { "raw": { "language": "json" } }
             },
             "url": {
@@ -65,7 +65,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"patient@example.test\",\n  \"password\": \"Example#Pass1\"\n}",
+              "raw": "{\n  \"email\": \"patient@example.test\",\n  \"password\": \"Example#Pass1\",\n  \"device_name\": \"Mona iPhone\"\n}",
               "options": { "raw": { "language": "json" } }
             },
             "url": {
@@ -102,7 +102,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"first_name\": \"Omar\",\n  \"last_name\": \"Hassan\",\n  \"email\": \"doctor@example.test\",\n  \"phone\": \"+15550200001\",\n  \"password\": \"Example#Pass1\",\n  \"password_confirmation\": \"Example#Pass1\",\n  \"specialty_id\": {{specialty_id}},\n  \"medical_license_number\": \"EXAMPLE-LICENSE-001\",\n  \"years_of_experience\": 7,\n  \"bio\": \"Example physician biography.\"\n}",
+              "raw": "{\n  \"first_name\": \"Omar\",\n  \"last_name\": \"Hassan\",\n  \"email\": \"doctor@example.test\",\n  \"phone\": \"+15550200001\",\n  \"password\": \"Example#Pass1\",\n  \"password_confirmation\": \"Example#Pass1\",\n  \"specialty_id\": {{specialty_id}},\n  \"medical_license_number\": \"EXAMPLE-LICENSE-001\",\n  \"years_of_experience\": 7,\n  \"bio\": \"Example physician biography.\",\n  \"device_name\": \"Omar Android\"\n}",
               "options": { "raw": { "language": "json" } }
             },
             "url": {
@@ -148,7 +148,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"doctor@example.test\",\n  \"password\": \"Example#Pass1\"\n}",
+              "raw": "{\n  \"email\": \"doctor@example.test\",\n  \"password\": \"Example#Pass1\",\n  \"device_name\": \"Omar Android\"\n}",
               "options": { "raw": { "language": "json" } }
             },
             "url": {

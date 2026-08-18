@@ -9,6 +9,7 @@ class LoginPatientRequest extends ApiAuthRequest
         return [
             'email' => ['required', 'email:rfc'],
             'password' => ['required', 'string'],
+            'device_name' => ['sometimes', 'string', 'max:100'],
         ];
     }
 }

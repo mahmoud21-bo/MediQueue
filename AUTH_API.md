@@ -9,7 +9,7 @@ Authorization: Bearer <plain-text-token>
 Accept: application/json
 ```
 
-Tokens are returned only by registration and login. Emails are stored in lowercase, and phone numbers are reduced to digits with an optional leading `+`. Passwords must be at least eight characters and contain uppercase and lowercase letters, a number, and a symbol.
+Tokens are returned only by registration and login. Sanctum token expiration is disabled, so mobile tokens remain valid until explicitly revoked. Each login creates a separate device token. Emails are stored in lowercase, and phone numbers are reduced to digits with an optional leading `+`. Passwords must be at least eight characters and contain uppercase and lowercase letters, a number, and a symbol.
 
 Clients cannot submit a role. The patient and doctor registration services assign their corresponding Spatie role inside a database transaction.
 
@@ -58,7 +58,8 @@ Validation failures return HTTP `422`, missing/invalid tokens return `401`, role
   "password": "Valid#Pass1",
   "password_confirmation": "Valid#Pass1",
   "date_of_birth": "1995-05-12",
-  "gender": "female"
+  "gender": "female",
+  "device_name": "Mona iPhone"
 }
 ```
 
@@ -71,11 +72,12 @@ Validation failures return HTTP `422`, missing/invalid tokens return `401`, role
 ```json
 {
   "email": "mona@example.com",
-  "password": "Valid#Pass1"
+  "password": "Valid#Pass1",
+  "device_name": "Mona iPhone"
 }
 ```
 
-Only active, non-deleted users with the `patient` role can log in here. A successful login updates `last_login_at`.
+Only active, non-deleted users with the `patient` role can log in here. `device_name` is accepted and defaults to `Patient Device` when omitted. A successful login updates `last_login_at` and creates a new token without revoking other devices.
 
 ### Current patient
 
@@ -111,7 +113,8 @@ Both require `auth:sanctum` and `patient`.
   "specialty_id": 1,
   "medical_license_number": "LIC-1000",
   "years_of_experience": 7,
-  "bio": "Board-certified physician."
+  "bio": "Board-certified physician.",
+  "device_name": "Omar Android"
 }
 ```
 
@@ -124,11 +127,12 @@ Both require `auth:sanctum` and `patient`.
 ```json
 {
   "email": "omar@example.com",
-  "password": "Valid#Pass1"
+  "password": "Valid#Pass1",
+  "device_name": "Omar Android"
 }
 ```
 
-Only active, non-deleted users with the `doctor` role can log in here. Pending and rejected doctors may log in.
+Only active, non-deleted users with the `doctor` role can log in here. `device_name` is accepted and defaults to `Doctor Device` when omitted. Pending and rejected doctors may log in.
 
 ### Current doctor
 
@@ -136,7 +140,7 @@ Only active, non-deleted users with the `doctor` role can log in here. Pending a
 
 ### Verification status
 
-`GET /api/v1/doctor/auth/verification-status` — requires `auth:sanctum` and `doctor`.
+`GET /api/v1/doctor/auth/verification-status` — requires `auth:sanctum`, `active`, and `doctor`.
 
 Returns `verification_status`, `reviewed_at`, `approved_at`, and `rejection_reason`. Pending and rejected doctors can access this endpoint.
 
@@ -152,6 +156,15 @@ Accepted fields are `first_name`, `last_name`, `email`, `phone`, `specialty_id`,
 - `POST /api/v1/doctor/auth/logout-all` revokes all tokens belonging to the authenticated doctor.
 
 Both require `auth:sanctum` and `doctor` and remain available regardless of verification status.
+
+## Mobile device sessions
+
+These shared endpoints require `auth:sanctum`, an active account, and either the `patient` or `doctor` role:
+
+- `GET /api/v1/auth/sessions` lists only the authenticated user's device tokens. It returns token IDs, device names, current-session flags, usage timestamps, and expiration metadata—never token hashes or plain-text tokens.
+- `DELETE /api/v1/auth/sessions/{tokenId}` revokes one device token owned by the authenticated user. Another user's token ID returns `404`.
+
+Logout revokes only the current bearer token. Logout-all revokes every token belonging to the user. Deactivating an account or changing its password revokes every token. The `active` middleware also blocks an inactive account whose token survived an out-of-band database update and removes its remaining tokens.
 
 ## Doctor approval guard
 

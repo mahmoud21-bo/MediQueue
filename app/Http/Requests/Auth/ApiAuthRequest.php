@@ -23,6 +23,10 @@ abstract class ApiAuthRequest extends FormRequest
             $normalized['phone'] = self::normalizePhone((string) $this->input('phone'));
         }
 
+        if ($this->has('device_name')) {
+            $normalized['device_name'] = trim((string) $this->input('device_name'));
+        }
+
         $this->merge($normalized);
     }
 

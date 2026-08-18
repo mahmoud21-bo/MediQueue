@@ -23,6 +23,7 @@ class DoctorAuthController extends ApiController
             $request->validated('email'),
             $request->validated('password'),
             'doctor',
+            $request->validated('device_name', 'Doctor Device'),
         ));
     }
 

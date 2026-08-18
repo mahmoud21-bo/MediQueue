@@ -20,7 +20,7 @@ class PatientRegistrationService
             $user->assignRole('patient');
             $user->patientProfile()->create(Arr::only($data, ['date_of_birth', 'gender']));
 
-            $token = $user->createToken('patient-api')->plainTextToken;
+            $token = $user->createToken($data['device_name'] ?? 'Patient Device')->plainTextToken;
 
             return AuthPayload::make($user, 'patient', $token);
         });

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\AdminAuthController;
+use App\Http\Controllers\Api\V1\AuthSessionController;
 use App\Http\Controllers\Api\V1\DoctorApplicationController;
 use App\Http\Controllers\Api\V1\DoctorAuthController;
 use App\Http\Controllers\Api\V1\DoctorProfileController;
@@ -20,7 +21,7 @@ Route::prefix('v1')->group(function (): void {
     Route::prefix('admin')->group(function (): void {
         Route::post('auth/login', [AdminAuthController::class, 'login'])->middleware('throttle:auth-login');
 
-        Route::middleware(['auth:sanctum', 'role:platform_admin'])->group(function (): void {
+        Route::middleware(['auth:sanctum', 'active', 'role:platform_admin'])->group(function (): void {
             Route::post('auth/logout', [AdminAuthController::class, 'logout']);
             Route::get('auth/me', [AdminAuthController::class, 'me']);
 
@@ -41,7 +42,7 @@ Route::prefix('v1')->group(function (): void {
         Route::post('register', [PatientAuthController::class, 'register'])->middleware('throttle:auth-register');
         Route::post('login', [PatientAuthController::class, 'login'])->middleware('throttle:auth-login');
 
-        Route::middleware(['auth:sanctum', 'role:patient'])->group(function (): void {
+        Route::middleware(['auth:sanctum', 'active', 'role:patient'])->group(function (): void {
             Route::post('logout', [PatientAuthController::class, 'logout']);
             Route::post('logout-all', [PatientAuthController::class, 'logoutAll']);
             Route::get('me', [PatientAuthController::class, 'me']);
@@ -49,13 +50,13 @@ Route::prefix('v1')->group(function (): void {
     });
 
     Route::patch('patient/profile', [PatientProfileController::class, 'update'])
-        ->middleware(['auth:sanctum', 'role:patient']);
+        ->middleware(['auth:sanctum', 'active', 'role:patient']);
 
     Route::prefix('doctor/auth')->group(function (): void {
         Route::post('register', [DoctorAuthController::class, 'register'])->middleware('throttle:auth-register');
         Route::post('login', [DoctorAuthController::class, 'login'])->middleware('throttle:auth-login');
 
-        Route::middleware(['auth:sanctum', 'role:doctor'])->group(function (): void {
+        Route::middleware(['auth:sanctum', 'active', 'role:doctor'])->group(function (): void {
             Route::post('logout', [DoctorAuthController::class, 'logout']);
             Route::post('logout-all', [DoctorAuthController::class, 'logoutAll']);
             Route::get('me', [DoctorAuthController::class, 'me']);
@@ -64,5 +65,12 @@ Route::prefix('v1')->group(function (): void {
     });
 
     Route::patch('doctor/profile', [DoctorProfileController::class, 'update'])
-        ->middleware(['auth:sanctum', 'role:doctor']);
+        ->middleware(['auth:sanctum', 'active', 'role:doctor']);
+
+    Route::middleware(['auth:sanctum', 'active', 'role:patient|doctor'])
+        ->prefix('auth/sessions')
+        ->group(function (): void {
+            Route::get('/', [AuthSessionController::class, 'index']);
+            Route::delete('{tokenId}', [AuthSessionController::class, 'destroy'])->whereNumber('tokenId');
+        });
 });

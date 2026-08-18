@@ -4,11 +4,13 @@ namespace App\Providers;
 
 use App\Models\DoctorProfile;
 use App\Policies\DoctorApplicationPolicy;
+use App\Policies\PersonalAccessTokenPolicy;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Gate::policy(DoctorProfile::class, DoctorApplicationPolicy::class);
+        Gate::policy(PersonalAccessToken::class, PersonalAccessTokenPolicy::class);
 
         RateLimiter::for('auth-register', fn (Request $request) => Limit::perMinute(5)->by($request->ip()));
 

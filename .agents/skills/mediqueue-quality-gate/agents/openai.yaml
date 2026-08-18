@@ -1,0 +1,4 @@
+interface:
+  display_name: "MediQueue Quality Gate"
+  short_description: "Audit and verify the Laravel backend safely"
+  default_prompt: "Use $mediqueue-quality-gate to run the complete MediQueue backend quality gate and report the real results."

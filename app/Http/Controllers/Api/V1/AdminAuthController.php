@@ -16,6 +16,7 @@ class AdminAuthController extends ApiController
             $request->validated('email'),
             $request->validated('password'),
             'platform_admin',
+            $request->validated('device_name', 'Admin Device'),
         ));
     }
 

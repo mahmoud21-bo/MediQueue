@@ -27,7 +27,7 @@ class DoctorRegistrationService
                 'application_submitted_at' => now(),
             ]);
 
-            $token = $user->createToken('doctor-api')->plainTextToken;
+            $token = $user->createToken($data['device_name'] ?? 'Doctor Device')->plainTextToken;
 
             return AuthPayload::make($user, 'doctor', $token);
         });

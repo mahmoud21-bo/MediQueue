@@ -23,6 +23,7 @@ class PatientAuthController extends ApiController
             $request->validated('email'),
             $request->validated('password'),
             'patient',
+            $request->validated('device_name', 'Patient Device'),
         ));
     }
 

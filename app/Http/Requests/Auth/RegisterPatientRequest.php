@@ -16,6 +16,7 @@ class RegisterPatientRequest extends ApiAuthRequest
             'password' => ['required', 'confirmed', Password::min(8)->letters()->mixedCase()->numbers()->symbols()],
             'date_of_birth' => ['required', 'date_format:Y-m-d', 'before:today'],
             'gender' => ['required', 'string', 'in:male,female,other'],
+            'device_name' => ['sometimes', 'string', 'max:100'],
         ];
     }
 }

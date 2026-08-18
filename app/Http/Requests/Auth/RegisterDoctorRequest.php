@@ -18,6 +18,7 @@ class RegisterDoctorRequest extends ApiAuthRequest
             'medical_license_number' => ['required', 'string', 'max:100', 'unique:doctor_profiles,medical_license_number'],
             'years_of_experience' => ['required', 'integer', 'min:0', 'max:80'],
             'bio' => ['nullable', 'string', 'max:5000'],
+            'device_name' => ['sometimes', 'string', 'max:100'],
         ];
     }
 }
